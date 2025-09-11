@@ -1,44 +1,79 @@
-class Automatizacion:
-    def __init__(self, nombre, hora_inicio, hora_fin, estado):
-        self.nombre = nombre
-        self.hora_inicio = hora_inicio
-        self.hora_fin = hora_fin
-        self.estado = estado
-        self.dispositivos = []
+import pyodbc
+from automatizacion import Automatizacion
 
-    def ejecutar_automatizaciones(vivienda, hora_actual):
-        for auto in vivienda.automatizaciones:
-            if auto.estado == "activa":
-                if auto.hora_inicio <= auto.hora_fin: # Rango normal (ej. 11:00 a 18:00)
-                    if auto.hora_inicio <= hora_actual <= auto.hora_fin:
-                        for dispositivo in auto.dispositivos:
-                            dispositivo.encender()
-                else:                                 # Rango que cruza la medianoche (ej. 19:00 a 06:00)
-                    if hora_actual >= auto.hora_inicio or hora_actual <= auto.hora_fin:
-                        for dispositivo in auto.dispositivos:
-                            dispositivo.encender()
+def conectar_bd():
+    return pyodbc.connect(
+        'DRIVER={SQL Server};'
+        'SERVER=localhost;'
+        'DATABASE=smarthome;'
+        'Trusted_Connection=yes;'
+    )
 
-    def cargar_automatizaciones(vivienda): # mas adelante para agregar a la base de datos
-        conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="tu_contraseña",
-            database="smarthome"
-        )
-        cursor = conn.cursor()
+# Cargar automatizaciones de una vivienda
+def cargar_automatizaciones(vivienda):
+    conn = conectar_bd()
+    cursor = conn.cursor()
 
-        query = """
-            SELECT nombre, hora_inicio, hora_fin, estado
-            FROM automatizaciones
-            WHERE id_vivienda = %s
-        """
-        cursor.execute(query, (vivienda.id,))
-        resultados = cursor.fetchall()
-        conn.close()
+    query = """
+        SELECT id_automatizacion, nombre, hora_inicio, hora_fin, estado
+        FROM automatizaciones
+        WHERE id_vivienda = ?
+    """
+    cursor.execute(query, (vivienda.id,))
+    resultados = cursor.fetchall()
+    conn.close()
 
-        for nombre, hora_inicio, hora_fin, estado in resultados:
-            auto = Automatizacion(nombre, hora_inicio, hora_fin, estado)
-            vivienda.automatizaciones.append(auto)
+    for id_auto, nombre, hora_inicio, hora_fin, estado in resultados:
+        auto = Automatizacion(id_auto, nombre, hora_inicio, hora_fin, estado)
+        vivienda.automatizaciones.append(auto)
 
-    
-    
+# Crear una nueva automatización
+def crear_automatizacion(nombre, hora_inicio, hora_fin, estado, id_vivienda):
+    conn = conectar_bd()
+    cursor = conn.cursor()
+
+    query = """
+        INSERT INTO automatizaciones (nombre, hora_inicio, hora_fin, estado, id_vivienda)
+        VALUES (?, ?, ?, ?, ?)
+    """
+    cursor.execute(query, (nombre, hora_inicio, hora_fin, estado, id_vivienda))
+    conn.commit()
+    conn.close()
+
+# Mostrar todas las automatizaciones
+def mostrar_automatizaciones():
+    conn = conectar_bd()
+    cursor = conn.cursor()
+
+    query = "SELECT id_automatizacion, nombre, hora_inicio, hora_fin, estado FROM automatizaciones"
+    cursor.execute(query)
+    resultados = cursor.fetchall()
+    conn.close()
+
+    automatizaciones = []
+    for id_auto, nombre, hora_inicio, hora_fin, estado in resultados:
+        auto = Automatizacion(id_auto, nombre, hora_inicio, hora_fin, estado)
+        automatizaciones.append(auto)
+
+    return automatizaciones
+
+# Buscar automatizaciones por vivienda
+def buscar_automatizaciones_por_vivienda(id_vivienda):
+    conn = conectar_bd()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT id_automatizacion, nombre, hora_inicio, hora_fin, estado
+        FROM automatizaciones
+        WHERE id_vivienda = ?
+    """
+    cursor.execute(query, (id_vivienda,))
+    resultados = cursor.fetchall()
+    conn.close()
+
+    automatizaciones = []
+    for id_auto, nombre, hora_inicio, hora_fin, estado in resultados:
+        auto = Automatizacion(id_auto, nombre, hora_inicio, hora_fin, estado)
+        automatizaciones.append(auto)
+
+    return automatizaciones
