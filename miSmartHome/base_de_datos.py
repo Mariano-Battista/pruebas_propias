@@ -16,45 +16,48 @@ base_de_datos={
     ],
     "automatizaciones":[
       {
-        'id':1,
-        'nombre': "Activar luces del Patio",
+        "id":1,
+        "nombre": "Encendido de luces del Patio",
+        "id_vivienda": 2, 
         "hora_inicio":"18:00",
         "hora_fin":"06:00",
-        "tipo":"iluminación",
-        "dispositivo":"luz",
+        "id_dispositivo":1,
         "estado":"activo"
       } ,
       {
-        'id':2,
-        'nombre': "activador/desactivador aspiradora",
+        "id":2,
+        "nombre": "Encendido de aspiradora",
+        "id_vivienda": 2, 
         "hora_inicio":"10:00",
         "hora_fin":"12:00",
-        "tipo":"aspiradora",
-        "dispositivo":"aspiradora",
+        "id_dispositivo":3,
         "estado":"activo"
       }  
 
         
     ],
     "dispositivos":[
-        {
-        'id':1,
-        'nombre': "luz",
-        'tipo': "iluminación",
-        'ubicacion': "patio",
-        'estado': False,
+    {
+        "id":1,
+        "nombre": "luz",
+        "tipo": "iluminación",
+        "id_vivienda":2,
+        "ubicacion": "patio",
+        "estado": False,
     },
     {
-        'id':2,
+        "id":2,
         "nombre": "aire acondicionado",
         "tipo": "aire acondicionado",
+        "id_vivienda":2,
         "ubicacion": "habitación",
         "estado": False,
     },
     {
-        'id':3,
+        "id":3,
         "nombre": "aspiradora",
         "tipo": "aspiradora",
+        "id_vivienda":2,
         "ubicacion": "comedor",
         "estado": False
     }

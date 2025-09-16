@@ -5,8 +5,8 @@ from menu import *
 
 def main():
     print(f"----BIENVENIDO A SMART HOME SOLUTIONS----{datetime.datetime.now().strftime("%H:%M")}")
-    iniciar_automatizacion_aspiradora()
-    iniciar_automatizacion_luces_del_patio()
+    #iniciar_automatizacion_aspiradora()
+    #iniciar_automatizacion_luces_del_patio()
     while True:
         mostrar_opciones_principal_de_app()
         opcion=input('Ingrese una opcion: ')
@@ -19,10 +19,10 @@ def main():
                 while (states['is_auth']):
                     role=verificar_rol()
                     match role:
-                        case 'admin':
+                        case "admin":
                             menu_admin()
                             
-                        case 'estandar':
+                        case "estandar":
                             menu_estandar()
             case '3':
                 print("Hasta la proxima.")

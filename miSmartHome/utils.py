@@ -11,9 +11,9 @@ def esta_en_rango_horario(hora_inicio, hora_fin):
     else:  
         return hora_actual >= hora_inicio or hora_actual <= hora_fin
 
-def buscar_automatizacion_por_tipo(tipo):
-    for automatizacion in base_de_datos['automatizaciones']:
-        if automatizacion['tipo'] == tipo:
+def buscar_automatizacion_por_id(id):
+    for automatizacion in base_de_datos["automatizaciones"]:
+        if automatizacion["id"] == id:
             return automatizacion
     return None
 

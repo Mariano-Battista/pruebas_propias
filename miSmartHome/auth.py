@@ -88,26 +88,7 @@ def consultar_perfil():
         return
 
 
-def cambiar_rol():
-    if(verify_admin()==False):
-        formatear_mensaje_consola("No tiene permisos para realizar esta acción")
-        return
-    correo=input("ingrese el correo de usuario: ").strip().lower()
-    if(correo=="admin@mail.com"):
-        formatear_mensaje_consola("No se puede cambiar el rol del administrador del software")
-        return
-    if(correo==states['correo']):#REEVALUAR YA QUE NO DEBERIA DEJARLE A NADIE MAS QUE AL ADMIN CAMBIAR ROLES
-        formatear_mensaje_consola("No se puede cambiar el rol de usted mismo")
-        return
-    for usuario in base_de_datos['usuarios']:
-        if (usuario['correo']==correo and usuario["Role"]=='estandar') :
-            usuario['Role']='admin'
-            formatear_mensaje_consola(f"se cambia el rol de {usuario['nombre']} a admin")
-        elif (usuario['correo']==correo and usuario["Role"]=='admin'):
-            usuario['Role']='estandar'
-            formatear_mensaje_consola(f"se cambia el rol de {usuario['nombre']} a estandar")
-        else:
-            formatear_mensaje_consola("Usuario no encontrado")
+
    
         
            
